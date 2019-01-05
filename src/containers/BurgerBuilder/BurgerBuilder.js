@@ -8,7 +8,6 @@ import withErrorHandler from '../../components/hoc/withErrorHandler/withErrorHan
 
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-import {Link} from 'react-router-dom';
 import axios from '../../axios.orders';
 
 
@@ -70,7 +69,7 @@ class BurgerBuilder extends Component {
 
         const priceAddition = INGREDIENT_PRICES[type];
         const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice + priceAddition;
+        const newPrice = Math.floor(oldPrice + priceAddition);
 
         this.setState({
             ingredients: newIngredients,
@@ -108,36 +107,14 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        // this.setState({loading: true});
 
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.totalPrice,
-        //     customer: {
-        //         name: 'Nikita Parovyi',
-        //         address: {
-        //             street: 'Rostovskaya',
-        //             zipCode: '3009',
-        //             country: 'Ukraine'
-        //         },
-        //         email: 'test@test.com'
-        //     },
-        //     deliveryMetyhod: 'Fastest'
-        // }
-
-        // axios.post('/orders.json', order)
-        //     .then(res => {
-        //         console.log(res);
-        //         this.setState({loading: false, purchasing: false});
-        //     }).catch(err => {
-        //         console.log(err)
-        //         this.setState({loading: false, purchasing: false});
-        //     });
         const queryParams = [];
 
         for(let i in this.state.ingredients) {
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
         }
+
+        queryParams.push('price=' + this.state.totalPrice);
 
         const queryString = queryParams.join('&');
 
