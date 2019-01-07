@@ -4,15 +4,14 @@ import Button from '../../../components/UI/Button/Button';
 
 const Order = (props) => {
 
-    let ingredients = null;
-    ingredients = Object.keys(props.ingredients).map(key => (
-        key + " : " + props.ingredients[key]
-    )).join(", ");
+    const ingredients = Object.keys(props.ingredients).map(key => (
+        <span key={key} className={classes.Ingredient}>{key} : {props.ingredients[key]} </span>
+    ));
     
 
     return(
         <div className={classes.Order}>
-            <p>Ingredients: <i>{ingredients}</i></p>
+            <p>Ingredients: {ingredients} </p>
             <p>Price: <strong>{props.price}</strong></p>
             <Button btnType={'Danger'} clicked={props.deleteOrder}>Delete Order</Button>
         </div>

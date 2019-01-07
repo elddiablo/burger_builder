@@ -6,3 +6,11 @@
     padding: 10px;
     box-shadow: 0 2px 3px #ccc;
 }
+
+.Ingredient {
+    display: inline-block;
+    text-transform: capitalize;
+    margin: 0 8px;
+    border: 1px solid grey;
+    padding: 5px;
+}
