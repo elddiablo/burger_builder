@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 import ContactData from './ContactData/ContactData';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
@@ -16,24 +16,30 @@ class Checkout extends Component {
     }
 
     render() {
-        return(
-            <div>
-                <CheckoutSummary ingredients={this.props.ings} checkoutCanceled = {this.checkoutCanceled}
-                checkoutContinued = {this.checkoutContinued}
+        let summary = <Redirect to="/" />;
+        if(this.props.ings) {
+            summary = 
+            <>
+                <CheckoutSummary 
+                    ingredients={this.props.ings} 
+                    checkoutCanceled = {this.checkoutCanceled}
+                    checkoutContinued = {this.checkoutContinued}
                 />
                 <Route 
                     path={this.props.match.url + '/contact-data'}
                     component={ContactData}
                 />
-            </div>
-        );
+            </>
+        }
+
+        return summary;
     }
 
 }
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients
+        ings: state.burgerBuilder.ingredients
     }
 }
 
