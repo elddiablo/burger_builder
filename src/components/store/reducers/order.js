@@ -31,11 +31,11 @@ const purchaseBurgerFail = (state) => {
 
 
 const fetchOrdersStart = (state) => {
-    return updateObject(state,{loading: true});
+    return updateObject(state, { loading: true });
 }
 
 const fetchOrdersSuccess = (state, action) => {
-    return updateObject(state,{loading: true, orders: action.orders});
+    return updateObject(state,{loading: false, orders: action.orders});
 }
 
 const fetchOrdersFail = (state) => {
