@@ -7,6 +7,8 @@ import Button from '../../../components/UI/Button/Button';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../components/hoc/withErrorHandler/withErrorHandler';
 
+import { updateObject } from '../../../components/shared/utility';
+
 import * as actions from '../../../components/store/actions/index';
 
 class ContactData extends Component {
@@ -106,8 +108,9 @@ class ContactData extends Component {
         }
         const order = {
             ingredients: this.props.ings,
-            price: this.props.totalPrice,
-            orderData: formData
+            price: this.props.totalPrice.toFixed(2),
+            orderData: formData,
+            userId: this.props.userId
         }
 
         this.props.onOrderBurger(order, this.props.token);
@@ -135,19 +138,17 @@ class ContactData extends Component {
     }
 
     inputChangedHandler = (event, inputIdentifier) => {
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        }
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        } 
+        
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            touched: true
+        });
 
-        // checking for valid values
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        })
 
-        // updating touched prop
-        updatedFormElement.touched = true;
         updatedOrderForm[inputIdentifier] = updatedFormElement;
 
         // updating the overall validity
@@ -207,13 +208,13 @@ class ContactData extends Component {
 
 }
 
-const mapStateToIngredients = state => {
-
+const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 
@@ -223,4 +224,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToIngredients, mapDispatchToProps)(withErrorHandler(ContactData, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));

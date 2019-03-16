@@ -8,6 +8,8 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../components/store/actions/index';
 
+import { updateObject } from '../../components/shared/utility';
+
 import classes from './Auth.module.css';
 
 export class Auth extends Component {
@@ -68,6 +70,13 @@ export class Auth extends Component {
     }
 
     inputChangedHandler = (event, inputIdentifier) => {
+
+        const updatedOrderForm = updateObject(this.state.controls[inputIdentifier], {
+            value: event.target.value,
+            valid: this.checkValidity(event.target.value, this.state.controls[inputIdentifier].validation),
+            touched: true
+        });
+
         const updatedOrderForm = {
             ...this.state.controls
         }
@@ -75,14 +84,6 @@ export class Auth extends Component {
         const updatedFormElement = {
             ...updatedOrderForm[inputIdentifier]
         } 
-
-        // checking for valid values
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-
-        // updating touched prop
-        updatedFormElement.touched = true;
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
 
         // updating the overall validity
         let formIsValid = true;

@@ -8,7 +8,7 @@ const initialState = {
     purchased: false
 }
 
-const purchaseInit = (state, action) => {
+const purchaseInit = (state) => {
     return updateObject(state, {purchased: false});
 }
 
@@ -21,8 +21,14 @@ const purchaseBurgerSuccess = (state, action) => {
     })
 }
 
+const clearPurchasedStatus = (state) => {
+    return updateObject(state, {
+        purchased: false
+    })
+}
+
 const purchaseBurgerStart = (state) => {
-    return updateObject(state,{loading: true});
+    return updateObject(state,{ loading: true });
 }
 
 const purchaseBurgerFail = (state) => {
@@ -44,6 +50,7 @@ const fetchOrdersFail = (state) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.SET_INGREDIENTS: return clearPurchasedStatus(state);
         case actionTypes.PURCHASE_INIT: return purchaseInit(state, action);
         case actionTypes.PURCHASE_BURGER_SUCCESS: return purchaseBurgerSuccess(state, action);
         case actionTypes.PURCHASE_BURGER_FAIL: return purchaseBurgerFail(state);
