@@ -64,9 +64,11 @@ class BurgerBuilder extends Component {
             ...this.props.ings
         };
 
+
         for(let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
+
         let orderSummary = null;
 
         let burger = null;

@@ -7,7 +7,7 @@ import Button from '../../../components/UI/Button/Button';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../components/hoc/withErrorHandler/withErrorHandler';
 
-import { updateObject } from '../../../components/shared/utility';
+import { updateObject, checkValidity } from '../../../components/shared/utility';
 
 import * as actions from '../../../components/store/actions/index';
 
@@ -117,31 +117,11 @@ class ContactData extends Component {
 
     }
 
-    checkValidity(value, rules) {
-        let isValid = true;
-
-                if (rules.required) {
-                    isValid = value.trim() !== '' && isValid;
-                }
-
-                if(rules.minLength) {
-                    isValid = value.length >= rules.minLength && isValid;
-                }
-        
-                if(rules.maxLength) {
-                    isValid = value.length <= rules.maxLength && isValid;
-                }
-
-
-        return isValid;
-
-    }
-
     inputChangedHandler = (event, inputIdentifier) => {
         
         const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
             value: event.target.value,
-            valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
             touched: true
         });
 
@@ -149,7 +129,6 @@ class ContactData extends Component {
             [inputIdentifier]: updatedFormElement
         })
 
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
 
         // updating the overall validity
         let formIsValid = true;
@@ -158,8 +137,6 @@ class ContactData extends Component {
         }
 
         this.setState({orderForm: updatedOrderForm, formIsValid: formIsValid});
-
-        console.log(updatedFormElement);
 
     }
 

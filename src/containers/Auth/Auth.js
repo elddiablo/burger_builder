@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../components/store/actions/index';
 
-import { updateObject } from '../../components/shared/utility';
+import { updateObject, checkValidity } from '../../components/shared/utility';
 
 import classes from './Auth.module.css';
 
@@ -49,51 +49,26 @@ export class Auth extends Component {
       isSignUp: true
     }
 
-    checkValidity(value, rules) {
-        let isValid = true;
-
-                if (rules.required) {
-                    isValid = value.trim() !== '' && isValid;
-                }
-
-                if(rules.minLength) {
-                    isValid = value.length >= rules.minLength && isValid;
-                }
-        
-                if(rules.maxLength) {
-                    isValid = value.length <= rules.maxLength && isValid;
-                }
-
-
-        return isValid;
-
-    }
-
     inputChangedHandler = (event, inputIdentifier) => {
 
-        const updatedOrderForm = updateObject(this.state.controls[inputIdentifier], {
+        const updatedControlsElem = updateObject(this.state.controls[inputIdentifier], {
             value: event.target.value,
-            valid: this.checkValidity(event.target.value, this.state.controls[inputIdentifier].validation),
+            valid: checkValidity(event.target.value, this.state.controls[inputIdentifier].validation),
             touched: true
         });
 
-        const updatedOrderForm = {
-            ...this.state.controls
-        }
-
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        } 
+        const updatedControls = updateObject(this.state.controls,{
+            [inputIdentifier]: updatedControlsElem
+        })
 
         // updating the overall validity
         let formIsValid = true;
-        for(let inputIdentifier in updatedOrderForm) {
-            formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+        for(let inputIdentifier in updatedControls) {
+            formIsValid = updatedControls[inputIdentifier].valid && formIsValid;
         }
 
-        this.setState({controls: updatedOrderForm, formIsValid: formIsValid});
+        this.setState({controls: updatedControls, formIsValid: formIsValid});
 
-        console.log(updatedFormElement);
 
     }
 

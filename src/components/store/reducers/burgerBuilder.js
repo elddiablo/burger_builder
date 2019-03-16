@@ -66,7 +66,6 @@ const reducer = (state = initialState, action) => {
             return fetchIngredientsFailed(state, action);
         default:
             return state;
-        break;
     }
 }
 

@@ -9,11 +9,6 @@ import * as actions from '../../components/store/actions/index';
 
 class Orders extends Component {
 
-    deleteOrderHandler = (key) => {
-        // delete request with id
-        console.log(key);
-    }
-
     componentDidMount() {
         this.props.onFetchOrders(this.props.token, this.props.userId);
     }
